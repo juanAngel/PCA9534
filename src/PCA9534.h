@@ -11,9 +11,20 @@
  */
 
 // This will load the definition for common Particle variable types
-#include "arduino.h"
+#include <Arduino.h>
+
+#define IO_EXP_3V3_GNSS_nRESET                          0x00
+#define IO_EXP_EXT_OUT0                                 0x01
+#define IO_EXP_CAN0_ENABLE_AB                           0x02
+#define IO_EXP_CAN0_RS_STBY                             0x03
+#define IO_EXP_3V3_CAN1_RESET                           0x04
+#define IO_EXP_3V3_SPI_nRESET                           0x05
+#define IO_EXP_3V3_IN0                                  0x06
+
+
 
 #define PCA9534_I2C_ADDRESS     0x20
+#define PCA9534_I2C_ADDRESS_A   0x38
 #define PCA9534_IP_REGISTER     0x00
 #define PCA9534_OP_REGISTER     0x01
 #define PCA9534_INV_REGISTER    0x02
