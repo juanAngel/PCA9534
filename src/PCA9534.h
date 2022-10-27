@@ -79,5 +79,7 @@ public:
 private:
   uint8_t _i2caddr; // I2C address of the device
   uint8_t _port; // Port configuration status on Configuration register
+  uint8_t _portMode; // Port configuration status on Configuration register
   uint8_t _invport; // Port inverted status on Polarity Inversion register
+  uint8_t _invportMode; // Port inverted status on Polarity Inversion register
 };

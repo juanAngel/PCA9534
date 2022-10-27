@@ -4,6 +4,7 @@
 PCA9534::PCA9534() {
 	_i2caddr = 0;
 	_port = 0;
+	_portMode = 0;
 	_invport = 0;
 }
 
@@ -20,38 +21,41 @@ void PCA9534::begin(uint8_t i2caddr) {
 	}
 }
 
-void PCA9534::pinMode(uint8_t pin, uint8_t mode) {
+void PCA9534::pinMode(uint8_t pin, uint8_t mode) 
+{
+//	Serial.printf("-----------------------pinmode %d ( input %d, ouput %d) 0x%X\r\n",mode,INPUT,OUTPUT,pin);
 	switch (mode) {
 		case OUTPUT:
 			// Clear the pin on the configuration register for output
-			_port &= ~(1 << pin);
+			_portMode &= ~(1 << pin);
 			break;
 		case INPUT_INVERTED:
 			// Set the pin on the configuration register for input
-			_port |= (1 << pin);
+			_portMode |= (1 << pin);
 			// Set the pin on the polarity inversion register for inverted input
-			_invport |= (1 << pin);
+			_invportMode |= (1 << pin);
 			break;
 		case INPUT:
 		default:
 			// Set the pin on the configuration register for input
-			_port |= (1 << pin);
+			_portMode |= (1 << pin);
 			// Clear the pin on the polarity inversion register for normal input
-			_invport &= ~(1 << pin);
+			_invportMode &= ~(1 << pin);
 			break;
 	}
 
 	// Write the configuration of the individual pins as inputs or outputs
 	Wire.beginTransmission(_i2caddr);
 	Wire.write(PCA9534_CONF_REGISTER);
-	Wire.write(_port);
+	Wire.write(_portMode);
+	//Serial.printf("-----------------------val del port 0x%X\r\n",_port);
 	Wire.endTransmission();
 
 	if (mode == INPUT_INVERTED || mode == INPUT) {
 		// Write the input polarity configuration of the individual pins
 		Wire.beginTransmission(_i2caddr);
 		Wire.write(PCA9534_INV_REGISTER);
-		Wire.write(_invport);
+		Wire.write(_invportMode);
 		Wire.endTransmission();
 	}
 }
@@ -84,7 +88,7 @@ uint8_t PCA9534::digitalRead(uint8_t pin) {
 	// next."
 	Wire.beginTransmission(_i2caddr);
 	Wire.write(PCA9534_IP_REGISTER);
-	Wire.write(_port);
+//	Wire.write(_port);
 	Wire.endTransmission();
 
 	// We only need to read 1 byte of data to get the pins
